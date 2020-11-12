@@ -30,15 +30,18 @@ Module.register("MMM-IndoorAndSaunaTemp", {
 	getDom: function() {
 		var self = this;
 		var wrapper = document.createElement("div");
+		wrapper.className = "large light";
 		var degreeLabel = "°";
 		if (this.indoorSensor.temp != NaN) {
-			var indoorTemp = document.createElement("H1");
-			indoorTemp.innerHTML = this.indoorSensor.temp + degreeLabel + " C";
+			var indoorTemp = document.createElement("SPAN");
+			indoorTemp.className = "bright";
+			indoorTemp.innerHTML = this.indoorSensor.temp + degreeLabel + "C";
 			wrapper.appendChild(indoorTemp);
 		}
 		if (this.saunaSensor.temp != NaN && this.saunaSensor.temp > this.config.saunaTempLimit) {
-			var saunaTemp = document.createElement("H1");
-			saunaTemp.innerHTML = this.saunaSensor.temp + degreeLabel + " C";
+			var saunaTemp = document.createElement("SPAN");
+			saunaTemp.className = "bright";
+			saunaTemp.innerHTML = this.saunaSensor.temp + degreeLabel + "C";
 			wrapper.appendChild(saunaTemp);
 		}
 		return wrapper;
@@ -65,13 +68,13 @@ Module.register("MMM-IndoorAndSaunaTemp", {
 		
 		if (notification == 'RUUVI_ENVIRONMENT_PACKET') {
 			var obj = JSON.parse(payload);
-			
+
 			if (this.indoorSensor.MAC === obj.MAC) {
-				this.indoorSensorTemp = obj.temperature;
+				this.indoorSensor.temp = obj.temperature;
 				self.updateDom();
 			}
 			else if (this.saunaSensor.MAC === obj.MAC) {
-				this.saunaSensorTemp = obj.temperature;
+				this.saunaSensor.temp = obj.temperature;
 				self.updateDom();
 			}
 		}
