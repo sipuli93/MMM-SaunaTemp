@@ -2,7 +2,7 @@
 
 This is a module for the [MagicMirror²](https://github.com/MichMich/MagicMirror/).
 
-Todo: Insert description here!
+Module takes sensor data via notifications, use modified [MMM-SensorGateway](https://github.com/sipuli93/MMM-SensorGateway).
 
 ## Using the module
 
@@ -11,10 +11,11 @@ To use this module, add the following configuration block to the modules array i
 var config = {
     modules: [
         {
-            module: 'MMM-IndoorAndSaunaTemp',
-            config: {
-                // See below for configurable options
-            }
+             module: "MMM-IndoorAndSaunaTemp",
+             position: "bottom_center",
+             config: {
+                indoorSensorMAC: "<Sensor mac address in capital>",
+                saunaSensorMAC: "<Sensor mac address in capita>"
         }
     ]
 }
@@ -24,5 +25,9 @@ var config = {
 
 | Option           | Description
 |----------------- |-----------
-| `option1`        | *Required* DESCRIPTION HERE
-| `option2`        | *Optional* DESCRIPTION HERE TOO <br><br>**Type:** `int`(milliseconds) <br>Default 60000 milliseconds (1 minute)
+| `indoorSensorMAC`        | *Required* Mac address of the sensor
+| `saunaSensorMAC`        | *Required* Mac address of the sensor
+| `saunaTempLimit`        | *Optional* The minimum to show sauna temperature <br>**Type:** `int`(celsius) <br>Default 35 celsius
+| `saunaReadyLimit`        | *Optional* The minimum when sauna temperature will start blinking <br>**Type:** `int`(celsius) <br>Default 60 celsius
+| `indoorSensorHeader`        | *Optional* Header for indoor <br>Default `infood`
+| `saunaSensorHeader`        | *Optional* Header for sauna <br>Default `sauna`
