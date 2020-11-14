@@ -9,7 +9,10 @@
 
 Module.register("MMM-IndoorAndSaunaTemp", {
 	defaults: {
-		saunaTempLimit: 35
+		saunaTempLimit: 35,
+		saunaReadyLimit: 60,
+		indoorSensorHeader: "Indoor",
+		saunaSensorHeader: "Sauna",
 	},
 
 	requiresVersion: "2.1.0", // Required version of MagicMirror
@@ -18,31 +21,51 @@ Module.register("MMM-IndoorAndSaunaTemp", {
 		var self = this;
 		this.indoorSensor = {
 			MAC: this.config.indoorSensorMAC,
-			temp: NaN
+			temp: NaN,
+			header: this.config.indoorSensorHeader
 		};
 		this.saunaSensor = {
 			MAC: this.config.saunaSensorMAC,
-			temp: NaN
+			temp: NaN,
+			header: this.config.saunaSensorHeader
 		};
 	},
 	
 	// Generate dom object for module
 	getDom: function() {
 		var self = this;
-		var wrapper = document.createElement("div");
-		wrapper.className = "large light";
+		var wrapper = document.createElement("DIV");
+		wrapper.className = "large light sidebyside";
 		var degreeLabel = "°";
 		if (this.indoorSensor.temp != NaN) {
-			var indoorTemp = document.createElement("SPAN");
-			indoorTemp.className = "bright";
-			indoorTemp.innerHTML = this.indoorSensor.temp + degreeLabel + "C";
-			wrapper.appendChild(indoorTemp);
+			var indoorWrapper = document.createElement("DIV");
+			var indoorHeader = document.createElement("HEADER");
+			var indoorTempSpan = document.createElement("SPAN");
+			var indoorHeaderText = document.createTextNode(this.indoorSensor.header);
+			var indoorTemp = document.createTextNode(this.indoorSensor.temp.toFixed(1) + degreeLabel + "C");
+			indoorTempSpan.className = "bright regular";
+			indoorTempSpan.appendChild(indoorTemp);
+			indoorHeader.appendChild(indoorHeaderText);
+			indoorWrapper.appendChild(indoorHeader);
+			indoorWrapper.appendChild(indoorTempSpan);
+			wrapper.appendChild(indoorWrapper);
 		}
 		if (this.saunaSensor.temp != NaN && this.saunaSensor.temp > this.config.saunaTempLimit) {
-			var saunaTemp = document.createElement("SPAN");
-			saunaTemp.className = "bright";
-			saunaTemp.innerHTML = this.saunaSensor.temp + degreeLabel + "C";
-			wrapper.appendChild(saunaTemp);
+			var saunaWrapper = document.createElement("DIV");
+                        var saunaHeader = document.createElement("HEADER");
+			var saunaTempSpan = document.createElement("SPAN");
+                        var saunaHeaderText = document.createTextNode(this.saunaSensor.header);
+			var saunaTemp = document.createTextNode(this.saunaSensor.temp.toFixed(1) + degreeLabel + "C");
+			if (this.saunaSensor.temp > this.config.saunaReadyLimit){
+				saunaTempSpan.className = "bright regular blinking";
+			} else {
+				saunaTempSpan.className = "bright regular";
+			}
+			saunaTempSpan.appendChild(saunaTemp);
+			saunaHeader.appendChild(saunaHeaderText);
+			saunaWrapper.appendChild(saunaHeader);
+			saunaWrapper.appendChild(saunaTempSpan);
+			wrapper.appendChild(saunaWrapper);
 		}
 		return wrapper;
 	},
@@ -62,7 +85,7 @@ Module.register("MMM-IndoorAndSaunaTemp", {
 		};
 	},
 	
-	// Override socket notification handler.
+	// Override notification handler.
 	notificationReceived: function (notification, payload, sender) {
 		var self = this;
 		
