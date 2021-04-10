@@ -18,16 +18,19 @@ Module.register("MMM-IndoorAndSaunaTemp", {
 	requiresVersion: "2.1.0", // Required version of MagicMirror
 
 	start: function() {
-		var self = this;
 		this.indoorSensor = {
 			MAC: this.config.indoorSensorMAC,
 			temp: NaN,
+			humidity: NaN,
 			header: this.config.indoorSensorHeader
 		};
 		this.saunaSensor = {
 			MAC: this.config.saunaSensorMAC,
 			temp: NaN,
 			header: this.config.saunaSensorHeader
+		};
+		this.outdoorSensor = {
+			MAC: this.config.outdoorSensorMAC
 		};
 	},
 	
@@ -42,7 +45,7 @@ Module.register("MMM-IndoorAndSaunaTemp", {
 			var indoorHeader = document.createElement("HEADER");
 			var indoorTempSpan = document.createElement("SPAN");
 			var indoorHeaderText = document.createTextNode(this.indoorSensor.header);
-			var indoorTemp = document.createTextNode(this.indoorSensor.temp.toFixed(1) + degreeLabel + "C");
+			var indoorTemp = document.createTextNode(this.indoorSensor.temp.toFixed(1) + degreeLabel + "C" + " | " + this.indoorSensor.humidity.toFixed(0) + "%");
 			indoorTempSpan.className = "bright regular";
 			indoorTempSpan.appendChild(indoorTemp);
 			indoorHeader.appendChild(indoorHeaderText);
@@ -94,11 +97,15 @@ Module.register("MMM-IndoorAndSaunaTemp", {
 
 			if (this.indoorSensor.MAC === obj.MAC) {
 				this.indoorSensor.temp = obj.temperature;
+				this.indoorSensor.humidity = obj.humidity;
 				self.updateDom();
 			}
 			else if (this.saunaSensor.MAC === obj.MAC) {
 				this.saunaSensor.temp = obj.temperature;
 				self.updateDom();
+			}
+			else if (this.outdoorSensor.MAC === obj.MAC) {
+				this.sendNotification("OUTDOOR_TEMPERATURE",obj.temperature);
 			}
 		}
 	},
