@@ -7,21 +7,21 @@
 
 Module.register("MMM-SaunaTemp", {
 	defaults: {
-		TempLimit: 35,
-		ReadyLimit: 60,
-		SensorHeader: "Sauna",
-		InitialDelay: 10,
-		RefreshDelay: 60
+		tempLimit: 35,
+		readyLimit: 60,
+		sensorHeader: "Sauna",
+		initialDelay: 10,
+		refreshDelay: 60
 	},
 
 	requiresVersion: "2.1.0", // Required version of MagicMirror
 
 	start: function() {
 		this.Sensor = {
-			endpoint: this.config.Endpoint,
+			endpoint: this.config.endpoint,
 			temp: NaN,
 			humidity: NaN,
-			header: this.config.SensorHeader
+			header: this.config.sensorHeader
 		};
 	},
 	
@@ -31,13 +31,13 @@ Module.register("MMM-SaunaTemp", {
 		var wrapper = document.createElement("DIV");
 		wrapper.className = "large light sidebyside";
 		var degreeLabel = "°";
-		if (this.Sensor.temp != NaN && this.Sensor.temp > this.config.TempLimit) {
+		if (this.sensor.temp != NaN && this.sensor.temp > this.config.tempLimit) {
 			var saunaWrapper = document.createElement("DIV");
                         var saunaHeader = document.createElement("HEADER");
 			var saunaTempSpan = document.createElement("SPAN");
-                        var saunaHeaderText = document.createTextNode(this.Sensor.header);
-			var saunaTemp = document.createTextNode(this.Sensor.temp.toFixed(1) + degreeLabel + "C");
-			if (this.Sensor.temp > this.config.ReadyLimit){
+                        var saunaHeaderText = document.createTextNode(this.sensor.header);
+			var saunaTemp = document.createTextNode(this.sensor.temp.toFixed(1) + degreeLabel + "C");
+			if (this.sensor.temp > this.config.readyLimit){
 				saunaTempSpan.className = "bright regular blinking";
 			} else {
 				saunaTempSpan.className = "bright regular";
