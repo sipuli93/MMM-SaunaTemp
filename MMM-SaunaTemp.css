@@ -5,11 +5,6 @@
  * MIT Licensed.
  *
  */
-.sidebyside {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-evenly;
-}
 .blinking{
   animation:blinkingText 1.2s infinite;
 }

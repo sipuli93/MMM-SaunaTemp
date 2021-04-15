@@ -14,7 +14,8 @@ var config = {
              module: "MMM-SaunaTemp",
              position: "bottom_center",
              config: {
-                Endpoint: "<URL to rest api>"
+                ruuvitagRestGatewayAddr: "http://<ip>:<port>",
+		sensorMac: "<sensor mac>"
         }
     ]
 }
@@ -24,7 +25,8 @@ var config = {
 
 | Option           | Description
 |----------------- |-----------
-| `endpoint`        | *Required* Full url pointing to sensor in rest api. Example `http://<ip>:<port>/ruuvitag/<macaddress>`
+| `ruuvitagRestGatewayAddr`        | *Required* url pointing to ruuvitagRestGateway
+| `sensorMac`        | *Required* Mac address of the sensor. Lowercase, only letters and numbers. Example "0a1b2c3d4e5f".
 | `tempLimit`        | *Optional* The minimum to show sauna temperature <br>**Type:** `int`(celsius) <br>Default 35 celsius
 | `readyLimit`        | *Optional* The minimum when sauna temperature will start blinking <br>**Type:** `int`(celsius) <br>Default 60 celsius
 | `sensorHeader`        | *Optional* Header for sauna <br>Default `sauna`
