@@ -21,7 +21,7 @@ Module.register("MMM-SaunaTemp", {
 	start: function() {
                 Log.info("Starting module: " + this.name);
                 this.sensor = {
-			mac: this.config.sensorMac
+			mac: this.config.sensorMac,
 			temperature: NaN,
 			humidity: NaN,
 			header: this.config.sensorHeader
@@ -90,8 +90,8 @@ Module.register("MMM-SaunaTemp", {
 
         // Handle received data and update dom
         processSensorData: function (data) {
-                this.sensor.temperature = data.ruuvitags[i].temperature;
-                this.sensor.humidity = data.ruuvitags[i].humidity;
+                this.sensor.temperature = data.ruuvitags[0].temperature;
+                this.sensor.humidity = data.ruuvitags[0].humidity;
                 this.loaded = true;
                 this.updateDom(this.config.animationSpeed);
         },
